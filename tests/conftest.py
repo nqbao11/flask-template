@@ -37,20 +37,22 @@ def recreate_database(app):
 
 
 @pytest.fixture(scope="function", autouse=True)
-def session(monkeypatch):
-    """Creates a new database session for a test."""
+def session(recreate_database):
+    from sqlalchemy.orm import sessionmaker
+
     connection = db.engine.connect()
     transaction = connection.begin()
-    options = dict(bind=connection, binds={})
-    session = db.create_scoped_session(options=options)
+
+    session_factory = sessionmaker(bind=connection)
+    session = db.scoped_session(session_factory)
 
     db.session = session
 
-    yield session
+    yield
 
-    session.close()
     transaction.rollback()
     connection.close()
+    session.close()
 
 
 @pytest.fixture(scope="function", autouse=True)
