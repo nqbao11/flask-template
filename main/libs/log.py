@@ -6,7 +6,7 @@ from main import config
 
 
 class ServiceLogger:
-    __LOGGERS = {}
+    __LOGGERS: dict[str, logging.Logger] = {}
 
     def __init__(self, name):
         if name in self.__LOGGERS:

@@ -2,8 +2,9 @@
 
 ## Requirements
 
-- Python 3.9+
+- Python 3.10+
 - MySQL 5.7+
+- [Poetry](https://python-poetry.org/)
 
 ## Installation
 
@@ -18,12 +19,12 @@ source ./venv/bin/activate
 ### Install dependencies
 
 ```shell
-pip install -r requirements-dev.txt
+poetry install
 ```
 
 ### Install `pre-commit` hooks
 
-- Install `pre-commit`: https://pre-commit.com/
+- Install `pre-commit`: https://pre-commit.com/ (should be installed globally)
 - Install `pre-commit` hooks:
 
   ```shell
