@@ -13,7 +13,7 @@ app.config.from_object(config)
 CORS(app)
 
 
-def register_subpackages():
+def register_subpackages() -> None:
     from main import models
 
     for m in models.__all__:
@@ -32,5 +32,5 @@ register_error_handlers(app)
 # Flask will automatically remove database sessions at the end of the request
 # or when the application shuts down:
 @app.teardown_appcontext
-def shutdown_session(*_, **__):
+def shutdown_session(*_, **__):  # type: ignore
     db.session.remove()
