@@ -1,6 +1,7 @@
 from logging.config import fileConfig
 
 from alembic import context
+from alembic.script.write_hooks import REVISION_SCRIPT_TOKEN, register
 from sqlalchemy import engine_from_config, pool
 
 from main import config as app_config
@@ -78,3 +79,15 @@ if context.is_offline_mode():
     run_migrations_offline()
 else:
     run_migrations_online()
+
+
+@register("shell_script")
+def shell_script(path: str, options: dict, ignore_output: bool = False) -> None:
+    import subprocess
+
+    subprocess.run(
+        [
+            options["entrypoint"],
+            *options["options"].replace(REVISION_SCRIPT_TOKEN, path).split(),
+        ],
+    )
