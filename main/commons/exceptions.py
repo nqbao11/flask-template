@@ -1,5 +1,3 @@
-from typing import Optional
-
 from flask import make_response
 
 from main.schemas.exceptions import ErrorSchema
@@ -40,8 +38,8 @@ class BaseError(Exception):
         *,
         error_message=None,
         error_data=None,
-        status_code: Optional[int] = None,
-        error_code: Optional[int] = None,
+        status_code: int | None = None,
+        error_code: int | None = None,
     ):
         """
         Customize the response exception
