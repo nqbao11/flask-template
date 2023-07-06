@@ -1,9 +1,9 @@
-from marshmallow import fields
+from typing import Any
 
 from .base import BaseSchema
 
 
 class ErrorSchema(BaseSchema):
-    error_message = fields.String()
-    error_data = fields.Raw()
-    error_code = fields.Integer()
+    error_message: str | None
+    error_data: Any | None
+    error_code: int | None

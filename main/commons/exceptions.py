@@ -61,7 +61,7 @@ class BaseError(Exception):
         self.error_data = error_data
 
     def to_response(self):
-        response = ErrorSchema().jsonify(self)
+        response = ErrorSchema.jsonify(self)
 
         return make_response(response, self.status_code)
 

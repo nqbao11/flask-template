@@ -5,54 +5,40 @@ import sys
 from main import config
 
 
-class ServiceLogger:
-    __LOGGERS: dict[str, logging.Logger] = {}
+def get_logger(name: str):
+    logger = logging.getLogger(name)
+    logger.setLevel(config.LOGGING_LEVEL)
 
-    def __init__(self, name):
-        if name in self.__LOGGERS:
-            self.logger = self.__LOGGERS[name]
-            return
+    formatter = logging.Formatter(
+        "[%(asctime)s][%(name)s][%(levelname)s]"
+        " (%(module)s:%(funcName)s:%(lineno)d) %(message)s"
+    )
 
-        # Create a logger for services
-        logger = logging.getLogger(name)
-        logger.setLevel(config.LOGGING_LEVEL)
+    handler = logging.StreamHandler(stream=sys.stdout)
+    handler.setFormatter(formatter)
 
-        # Append current date time and log level to the beginning of the log message
-        formatter = logging.Formatter(
-            "[%(asctime)s][%(name)s][%(levelname)s] %(message)s"
-        )
+    if not logger.hasHandlers():
+        logger.addHandler(handler)
 
-        handler = logging.StreamHandler(stream=sys.stdout)
-        handler.setFormatter(formatter)
+    logger.propagate = False
 
-        if not logger.hasHandlers():
-            logger.addHandler(handler)
-        logger.propagate = False
+    return logger
 
-        self.logger = logger
-        self.__LOGGERS[name] = logger
 
-    def info(self, **kwargs):
-        return self.log(level=logging.INFO, **kwargs)
-
-    def debug(self, **kwargs):
-        return self.log(level=logging.DEBUG, **kwargs)
-
-    def warning(self, **kwargs):
-        return self.log(level=logging.WARNING, **kwargs)
-
-    def error(self, **kwargs):
-        return self.log(level=logging.ERROR, **kwargs)
-
-    def exception(self, **kwargs):
-        # Only be used when there's an exception
-        return self.log(level=logging.CRITICAL, **kwargs)
-
-    def log(self, level, message, data=None):
+class CustomLogger(logging.Logger):
+    def _log(  # type: ignore[override]
+        self,
+        level: int,
+        msg: str,
+        args,
+        data=None,
+        **kwargs,
+    ):
         if data:
-            message = f"{message} | {json.dumps(data, default=str)}"
+            msg = f"{msg} | {json.dumps(data, default=str)}"
 
-        if level == logging.CRITICAL:
-            self.logger.exception(message)
-        else:
-            self.logger.log(level, message)
+        # noinspection PyProtectedMember
+        super()._log(level, msg, args, **kwargs)
+
+
+logging.Logger.manager.loggerClass = CustomLogger

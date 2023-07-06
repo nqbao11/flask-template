@@ -1,16 +1,16 @@
-from flask import jsonify
-from marshmallow import EXCLUDE, Schema, fields
+from pydantic import BaseModel, ConfigDict, Extra
+
+from main.libs.utils import make_json_response
 
 
-class BaseSchema(Schema):
-    class Meta:
-        unknown = EXCLUDE
+class BaseSchema(BaseModel):
+    model_config = ConfigDict(
+        extra=Extra.ignore,
+        from_attributes=True,
+        str_strip_whitespace=True,
+    )
 
-    def jsonify(self, obj, many=False):
-        return jsonify(self.dump(obj, many=many))
-
-
-class PaginationSchema(BaseSchema):
-    items_per_page = fields.Integer()
-    page = fields.Integer()
-    total_items = fields.Integer()
+    @classmethod
+    def jsonify(cls, value):
+        payload = cls.model_validate(value).model_dump_json()
+        return make_json_response(payload)

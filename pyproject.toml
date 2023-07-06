@@ -7,18 +7,18 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-alembic = "^1.10.3"
-flask = "^2.2.3"
+alembic = "^1.11.1"
+flask = "^2.3.2"
 flask-cors = "^3.0.10"
-marshmallow = "^3.19.0"
-pyjwt = "^2.6.0"
-pymysql = "^1.0.3"
-sqlalchemy = "^2.0.9"
+pydantic = "^2.0.2"
+pyjwt = "^2.7.0"
+pymysql = "^1.1.0"
+sqlalchemy = "^2.0.18"
 
 [tool.poetry.group.dev.dependencies]
-coverage = "^7.2.3"
-pytest = "^7.3.0"
-pytest-cov = "^4.0.0"
+coverage = "^7.2.7"
+pytest = "^7.4.0"
+pytest-cov = "^4.1.0"
 
 [build-system]
 requires = ["poetry-core"]
@@ -32,9 +32,11 @@ select = [
     "E",
     "W",
     # isort
-    "I001",
+    "I",
     # flake8-print
     "T20",
+    # pyupgrade
+    "UP",
     # Ruff-specific rules
     "RUF",
 ]

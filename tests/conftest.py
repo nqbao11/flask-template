@@ -6,13 +6,13 @@ from sqlalchemy.orm import scoped_session
 
 from main import app as _app
 from main import db
-from main.libs.log import ServiceLogger
+from main.libs.log import get_logger
 from main.models.base import BaseModel
 
-logger = ServiceLogger(__name__)
+logger = get_logger(__name__)
 
 if os.getenv("ENVIRONMENT") != "test":
-    logger.error(message='Tests should be run with "ENVIRONMENT=test"')
+    logger.error('Tests should be run with "ENVIRONMENT=test"')
     sys.exit(1)
 
 
