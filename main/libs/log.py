@@ -17,10 +17,10 @@ def get_logger(name: str):
     handler = logging.StreamHandler(stream=sys.stdout)
     handler.setFormatter(formatter)
 
+    logger.propagate = False
+
     if not logger.hasHandlers():
         logger.addHandler(handler)
-
-    logger.propagate = False
 
     return logger
 
